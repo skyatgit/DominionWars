@@ -9,6 +9,9 @@ using YAT;
 
 namespace DominionWars.Manager;
 
+/// <summary>
+/// 游戏管理器
+/// </summary>
 public static class GameManager
 {
     public delegate void GameOverHandler();
@@ -34,7 +37,7 @@ public static class GameManager
 
     private static void InitManager()
     {
-
+        DataManager.Init();
     }
 
     private static void InitConsole()
@@ -83,10 +86,7 @@ public static class GameManager
 
     public static void GameOver()
     {
-        if (GameOverEvent != null)
-        {
-            GameOverEvent();
-        }
+        GameOverEvent?.Invoke();
 
         IsStop = true;
     }
@@ -126,11 +126,11 @@ public static class GameManager
             });
     }
 
-    public static void ErrorGameOver(GameStopException e)
+    private static void ErrorGameOver(GameStopException e)
     {
-        if (s_gameExceptionCallback.ContainsKey(e.ExceptionType))
+        if (s_gameExceptionCallback.TryGetValue(e.ExceptionType, out var value))
         {
-            s_gameExceptionCallback[e.ExceptionType].ForEach(action => action(e));
+            value.ForEach(action => action(e));
         }
         IsStop = true;
     }
