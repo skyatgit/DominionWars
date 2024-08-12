@@ -1,6 +1,6 @@
 using Godot;
 
-namespace DominionWars.scripts;
+namespace DominionWars;
 
 public partial class MainGame : Node2D
 {
